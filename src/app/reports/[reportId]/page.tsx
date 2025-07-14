@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, use } from 'react';
 import { Button } from '@/components/Button';
 
 export default function ReportPage({ params }: { params: { reportId: string } }) {
+  const { reportId } = use(Promise.resolve(params));
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
@@ -47,7 +48,7 @@ export default function ReportPage({ params }: { params: { reportId: string } })
         <header>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h1 className="text-3xl font-bold leading-tight text-gray-900">
-              Report {params.reportId}
+              Report {reportId}
             </h1>
           </div>
         </header>
