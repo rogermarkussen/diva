@@ -1,0 +1,41 @@
+'use client';
+
+import { useState } from 'react';
+import { Header } from '@/components/Header';
+
+const initialUser = {
+  name: 'John Doe',
+  companies: [
+    { id: 1, name: 'Company A' },
+    { id: 2, name: 'Company B' },
+    { id: 3, name: 'Company C' },
+  ],
+  currentCompany: { id: 1, name: 'Company A' },
+};
+
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [user, setUser] = useState(initialUser);
+
+  const handleSwitchCompany = (companyId: number) => {
+    const newCompany = user.companies.find((c) => c.id === companyId);
+    if (newCompany) {
+      setUser({ ...user, currentCompany: newCompany });
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100">
+      <Header
+        companyName={user.currentCompany.name}
+        userName={user.name}
+        userCompanies={user.companies}
+        onSwitchCompany={handleSwitchCompany}
+      />
+      <main>{children}</main>
+    </div>
+  );
+}

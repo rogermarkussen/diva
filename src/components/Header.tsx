@@ -1,29 +1,30 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 interface HeaderProps {
   companyName: string;
   userName: string;
   userCompanies: { id: number; name: string }[];
+  onSwitchCompany: (companyId: number) => void;
 }
 
 export function Header({
   companyName,
   userName,
   userCompanies,
+  onSwitchCompany,
 }: HeaderProps) {
-  const router = useRouter();
   const [showSwitcher, setShowSwitcher] = useState(false);
 
   const handleSwitchCompany = (companyId: number) => {
-    // In a real app, you would switch the company in the user's session
-    // and then reload the page or redirect to the dashboard.
-    console.log(`Switched to company: ${companyId}`);
+    onSwitchCompany(companyId);
     setShowSwitcher(false);
-    router.push('/dashboard');
   };
+
+  const otherCompanies = userCompanies.filter(
+    (c) => c.name !== companyName
+  );
 
   return (
     <header className="bg-white shadow">
@@ -32,7 +33,7 @@ export function Header({
           <h1 className="text-3xl font-bold text-gray-900">{companyName}</h1>
           <p className="text-sm text-gray-500">Signed in as {userName}</p>
         </div>
-        {userCompanies.length > 1 && (
+        {otherCompanies.length > 0 && (
           <div className="relative">
             <button
               onClick={() => setShowSwitcher(!showSwitcher)}
@@ -43,7 +44,7 @@ export function Header({
             {showSwitcher && (
               <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                 <div className="py-1">
-                  {userCompanies.map((company) => (
+                  {otherCompanies.map((company) => (
                     <a
                       key={company.id}
                       href="#"
