@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, use } from 'react';
 import { Button } from '@/components/Button';
 
 export default function ReportPage({ params }: { params: { reportId: string } }) {
-  const { reportId } = params;
+  const { reportId } = use(Promise.resolve(params));
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
