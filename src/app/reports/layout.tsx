@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Header } from '@/components/Header';
 
 const initialUser = {
@@ -13,12 +14,21 @@ const initialUser = {
   currentCompany: { id: 1, name: 'Company A' },
 };
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function ReportsLayoutContent({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState(initialUser);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const companyId = searchParams.get('companyId');
+    if (companyId) {
+      const newCompany = user.companies.find(
+        (c) => c.id === parseInt(companyId)
+      );
+      if (newCompany) {
+        setUser({ ...user, currentCompany: newCompany });
+      }
+    }
+  }, [searchParams]);
 
   const handleSwitchCompany = (companyId: number) => {
     const newCompany = user.companies.find((c) => c.id === companyId);
@@ -37,5 +47,17 @@ export default function DashboardLayout({
       />
       <main>{children}</main>
     </div>
+  );
+}
+
+export default function ReportsLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ReportsLayoutContent>{children}</ReportsLayoutContent>
+    </Suspense>
   );
 }
