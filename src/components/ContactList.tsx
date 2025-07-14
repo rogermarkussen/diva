@@ -52,36 +52,61 @@ export function ContactList() {
   };
 
   return (
-    <div>
-      <h2>Contacts</h2>
-      <ul>
-        {contacts.map((contact) => (
-          <li key={contact.id}>
-            {contact.name} ({contact.email}) {contact.isMain && <strong>(Main)</strong>}
-            {!contact.isMain && (
-              <Button onClick={() => handleDeleteContact(contact.id)}>Delete</Button>
-            )}
-            {!contact.isMain && (
-              <Button onClick={() => setMainContact(contact.id)}>Set as Main</Button>
-            )}
-          </li>
-        ))}
-      </ul>
-      <div>
-        <h3>Add New Contact</h3>
-        <input
-          type="text"
-          placeholder="Name"
-          value={newContactName}
-          onChange={(e) => setNewContactName(e.target.value)}
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={newContactEmail}
-          onChange={(e) => setNewContactEmail(e.target.value)}
-        />
-        <Button onClick={handleAddContact}>Add Contact</Button>
+    <div className="bg-white shadow sm:rounded-lg">
+      <div className="px-4 py-5 sm:p-6">
+        <h2 className="text-lg font-medium text-gray-900">Contacts</h2>
+        <ul className="mt-4 space-y-4">
+          {contacts.map((contact) => (
+            <li key={contact.id} className="flex items-center justify-between">
+              <div>
+                <p className="font-medium">{contact.name}</p>
+                <p className="text-sm text-gray-500">{contact.email}</p>
+              </div>
+              <div className="flex items-center space-x-2">
+                {contact.isMain ? (
+                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                    Main
+                  </span>
+                ) : (
+                  <>
+                    <Button
+                      onClick={() => setMainContact(contact.id)}
+                      className="text-sm bg-gray-200 hover:bg-gray-300 text-gray-800"
+                    >
+                      Set as Main
+                    </Button>
+                    <Button
+                      onClick={() => handleDeleteContact(contact.id)}
+                      className="text-sm bg-red-500 hover:bg-red-700 text-white"
+                    >
+                      Delete
+                    </Button>
+                  </>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-6">
+          <h3 className="text-lg font-medium text-gray-900">Add New Contact</h3>
+          <div className="mt-4 flex space-x-4">
+            <input
+              type="text"
+              placeholder="Name"
+              value={newContactName}
+              onChange={(e) => setNewContactName(e.target.value)}
+              className="flex-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              value={newContactEmail}
+              onChange={(e) => setNewContactEmail(e.target.value)}
+              className="flex-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            />
+            <Button onClick={handleAddContact}>Add Contact</Button>
+          </div>
+        </div>
       </div>
     </div>
   );

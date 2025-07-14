@@ -6,7 +6,7 @@ import { Button } from '@/components/Button';
 export default function ReportPage({ params }: { params: { reportId: string } }) {
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const [isvalidating, setIsValidating] = useState(false);
+  const [isValidating, setIsValidating] = useState(false);
   const [validationLog, setValidationLog] = useState<string[]>([]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,7 +19,6 @@ export default function ReportPage({ params }: { params: { reportId: string } })
     if (!file) return;
 
     setIsUploading(true);
-    // Simulate file upload
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsUploading(false);
 
@@ -43,25 +42,61 @@ export default function ReportPage({ params }: { params: { reportId: string } })
   };
 
   return (
-    <div>
-      <h1>Report {params.reportId}</h1>
-      <div>
-        <input type="file" onChange={handleFileChange} />
-        <Button onClick={handleUpload} disabled={!file || isUploading || isvalidating}>
-          {isUploading ? 'Uploading...' : 'Upload and Validate'}
-        </Button>
-      </div>
+    <div className="min-h-screen bg-gray-100">
+      <div className="py-10">
+        <header>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 className="text-3xl font-bold leading-tight text-gray-900">
+              Report {params.reportId}
+            </h1>
+          </div>
+        </header>
+        <main>
+          <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div className="px-4 py-8 sm:px-0">
+              <div className="bg-white shadow sm:rounded-lg">
+                <div className="px-4 py-5 sm:p-6">
+                  <h2 className="text-lg font-medium text-gray-900">
+                    Upload File
+                  </h2>
+                  <div className="mt-4 flex items-center space-x-4">
+                    <input
+                      type="file"
+                      onChange={handleFileChange}
+                      className="flex-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                    />
+                    <Button
+                      onClick={handleUpload}
+                      disabled={!file || isUploading || isValidating}
+                    >
+                      {isUploading ? 'Uploading...' : 'Upload and Validate'}
+                    </Button>
+                  </div>
+                </div>
+              </div>
 
-      {isvalidating && (
-        <div>
-          <h2>Validation Log</h2>
-          <ul>
-            {validationLog.map((entry, index) => (
-              <li key={index}>{entry}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+              {(isValidating || validationLog.length > 0) && (
+                <div className="mt-8 bg-white shadow sm:rounded-lg">
+                  <div className="px-4 py-5 sm:p-6">
+                    <h2 className="text-lg font-medium text-gray-900">
+                      Validation Log
+                    </h2>
+                    <div className="mt-4 bg-gray-900 text-white rounded-md p-4">
+                      <ul className="space-y-2">
+                        {validationLog.map((entry, index) => (
+                          <li key={index} className="font-mono text-sm">
+                            {entry}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }
