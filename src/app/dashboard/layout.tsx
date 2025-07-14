@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Header } from '@/components/Header';
 
 const initialUser = {
@@ -17,6 +17,7 @@ const initialUser = {
 function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState(initialUser);
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   useEffect(() => {
     const companyId = searchParams.get('companyId');
@@ -31,10 +32,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
   }, [searchParams]);
 
   const handleSwitchCompany = (companyId: number) => {
-    const newCompany = user.companies.find((c) => c.id === companyId);
-    if (newCompany) {
-      setUser({ ...user, currentCompany: newCompany });
-    }
+    router.push(`/dashboard?companyId=${companyId}`);
   };
 
   return (
@@ -44,6 +42,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
         userName={user.name}
         userCompanies={user.companies}
         onSwitchCompany={handleSwitchCompany}
+        showSwitcher={true}
       />
       <main>{children}</main>
     </div>

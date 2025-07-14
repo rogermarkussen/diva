@@ -7,6 +7,7 @@ interface HeaderProps {
   userName: string;
   userCompanies: { id: number; name: string }[];
   onSwitchCompany: (companyId: number) => void;
+  showSwitcher: boolean;
 }
 
 export function Header({
@@ -14,12 +15,13 @@ export function Header({
   userName,
   userCompanies,
   onSwitchCompany,
+  showSwitcher,
 }: HeaderProps) {
-  const [showSwitcher, setShowSwitcher] = useState(false);
+  const [isSwitcherOpen, setIsSwitcherOpen] = useState(false);
 
   const handleSwitchCompany = (companyId: number) => {
     onSwitchCompany(companyId);
-    setShowSwitcher(false);
+    setIsSwitcherOpen(false);
   };
 
   const otherCompanies = userCompanies.filter(
@@ -33,15 +35,15 @@ export function Header({
           <h1 className="text-3xl font-bold text-gray-900">{companyName}</h1>
           <p className="text-sm text-gray-500">Signed in as {userName}</p>
         </div>
-        {otherCompanies.length > 0 && (
+        {showSwitcher && otherCompanies.length > 0 && (
           <div className="relative">
             <button
-              onClick={() => setShowSwitcher(!showSwitcher)}
+              onClick={() => setIsSwitcherOpen(!isSwitcherOpen)}
               className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500"
             >
               Switch Company
             </button>
-            {showSwitcher && (
+            {isSwitcherOpen && (
               <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                 <div className="py-1">
                   {otherCompanies.map((company) => (

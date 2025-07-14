@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from './Button';
 
 interface Contact {
@@ -10,21 +10,34 @@ interface Contact {
   isMain: boolean;
 }
 
-const initialContacts: Contact[] = [
-  { id: 1, name: 'John Doe', email: 'john.doe@example.com', isMain: true },
-  { id: 2, name: 'Jane Smith', email: 'jane.smith@example.com', isMain: false },
-  { id: 3, name: 'Peter Jones', email: 'peter.jones@example.com', isMain: false },
-];
+const allContacts: { [companyId: number]: Contact[] } = {
+  1: [
+    { id: 1, name: 'John Doe', email: 'john.doe@example.com', isMain: true },
+    { id: 2, name: 'Jane Smith', email: 'jane.smith@example.com', isMain: false },
+  ],
+  2: [
+    { id: 3, name: 'Peter Jones', email: 'peter.jones@example.com', isMain: true },
+  ],
+  3: [
+    { id: 4, name: 'Mary Williams', email: 'mary.williams@example.com', isMain: true },
+    { id: 5, name: 'David Brown', email: 'david.brown@example.com', isMain: false },
+    { id: 6, name: 'Susan Davis', email: 'susan.davis@example.com', isMain: false },
+  ],
+};
 
-export function ContactList() {
-  const [contacts, setContacts] = useState<Contact[]>(initialContacts);
+export function ContactList({ companyId }: { companyId: number }) {
+  const [contacts, setContacts] = useState<Contact[]>([]);
   const [newContactName, setNewContactName] = useState('');
   const [newContactEmail, setNewContactEmail] = useState('');
+
+  useEffect(() => {
+    setContacts(allContacts[companyId] || []);
+  }, [companyId]);
 
   const handleAddContact = () => {
     if (newContactName && newContactEmail) {
       const newContact: Contact = {
-        id: Math.max(...contacts.map((c) => c.id)) + 1,
+        id: Math.random(), // In a real app, this would be a proper ID from the backend
         name: newContactName,
         email: newContactEmail,
         isMain: false,
