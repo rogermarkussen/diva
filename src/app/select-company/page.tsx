@@ -13,10 +13,7 @@ export default function SelectCompanyPage() {
   const router = useRouter();
 
   const handleSelectCompany = (companyId: number) => {
-    // In a real app, you would set the selected company in the user's session
-    // and then redirect to the dashboard.
-    console.log(`Selected company: ${companyId}`);
-    router.push('/dashboard');
+    router.push(`/dashboard?companyId=${companyId}`);
   };
 
   return (

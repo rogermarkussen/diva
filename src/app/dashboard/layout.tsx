@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Header } from '@/components/Header';
 
 const initialUser = {
@@ -19,6 +20,19 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [user, setUser] = useState(initialUser);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const companyId = searchParams.get('companyId');
+    if (companyId) {
+      const newCompany = user.companies.find(
+        (c) => c.id === parseInt(companyId)
+      );
+      if (newCompany) {
+        setUser({ ...user, currentCompany: newCompany });
+      }
+    }
+  }, [searchParams]);
 
   const handleSwitchCompany = (companyId: number) => {
     const newCompany = user.companies.find((c) => c.id === companyId);
